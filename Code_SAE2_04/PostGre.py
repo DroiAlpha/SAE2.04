@@ -36,22 +36,23 @@ class PostGre:
         """
         conn = self.connection()
         cur = conn.cursor()
-        colonnes_def = ", ".join(f"{col} {typ}" for col, typ in zip(colonnes, types))
-        sql = f"CREATE TABLE IF NOT EXISTS {table} ({colonnes_def})"
+        colonnes_def = ", ".join(f'"{col.lower()}" {typ}' for col, typ in zip(colonnes, types))
+        sql = f'CREATE TABLE IF NOT EXISTS "{table}" ({colonnes_def})'
         cur.execute(sql)
         cur.close()
         conn.commit()
         conn.close()
 
-    def inserer(self, table, valeurs: list):
+    def inserer(self, table, valeurs: list, colonnes: list):
         """
         méthode pour insérer des valeurs dans une BaD :
             - Il faut mettre la liste des valeurs à mettre en parametre
         """
         conn = self.connection()
         cur = conn.cursor()
-        valeurs_def = ", ".join(["%s"] * len(valeurs))
-        sql = f"INSERT INTO {table} VALUES ({valeurs_def})"
+        colonnes_def = ", ".join(f'"{col.lower()}"' for col in colonnes)
+        placeholders = ", ".join(["%s"] * len(valeurs))
+        sql = f'INSERT INTO "{table}" ({colonnes_def}) VALUES ({placeholders})'
         cur.execute(sql, valeurs)
         cur.close()
         conn.commit()
@@ -65,8 +66,8 @@ class PostGre:
         """
         conn = self.connection()
         cur = conn.cursor()
-        champs_def = ", ".join(f"{c}" for c in champs)
-        sql = f"SELECT {champs_def} FROM {table}"
+        champs_def = ", ".join(f'"{c.lower()}"' for c in champs)
+        sql = f'SELECT {champs_def} FROM "{table}"'
         cur.execute(sql)
         lignes = cur.fetchall()
         for ligne in lignes:
