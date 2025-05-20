@@ -7,9 +7,11 @@ dans la database
 
 from PostGre import *
 from Acces_API import *
+import threading # insane
 
 url_ouvrages = "https://hubeau.eaufrance.fr/api/v1/prelevements/referentiel/ouvrages"
 url_pt_prelevement = "https://hubeau.eaufrance.fr/api/v1/prelevements/referentiel/points_prelevement"
+
 
 ouvrages = Acces_API(url_ouvrages) # -> 5000 lignes
 pt_prelevement = Acces_API(url_pt_prelevement) # -> 5000 lignes
@@ -77,9 +79,9 @@ def liste_valeurs_departement():
 # ----------- VARIABLES IMPORTANTES --------------#
 
 host = "localhost" # a mettre celui de PostGre
-database = "Test" # a mettre celui de PostGre
+database = "uwu" # a mettre celui de PostGre
 user = "postgres" # a mettre celui de PostGre
-password = "2704" # a mettre celui de PostGre
+password = "lyna" # a mettre celui de PostGre
 
 database_PostGre = PostGre(host, database, user, password)
 
@@ -103,14 +105,30 @@ liste_type_colonnes_commune = ['VARCHAR(500)', 'INTEGER PRIMARY KEY', 'INTEGER R
 liste_colonnes_departement = ['libelle_departement', 'code_departement']
 liste_type_colonnes_departement = ['VARCHAR(500)', 'INTEGER PRIMARY KEY']
 
-database_PostGre.supprimer(nom_ouvrage)
-database_PostGre.supprimer(nom_departement)
+# database_PostGre.supprimer(nom_ouvrage)
+# database_PostGre.supprimer(nom_departement)
+# database_PostGre.supprimer(nom_pt_prelevement)
+# database_PostGre.supprimer(nom_commune)
 
-creation(nom_departement, liste_colonnes_departement, liste_type_colonnes_departement, liste_valeurs_departement())
-creation(nom_ouvrage, liste_colonnes_ouvrages, liste_type_colonnes_ouvrages, liste_valeurs_ouvrage(liste_colonnes_ouvrages))
-creation(nom_pt_prelevement, liste_colonnes_pt_prelevement, liste_type_colonnes_pt_prelevement, liste_valeurs_pt_prelevement(liste_colonnes_pt_prelevement))
-creation(nom_commune, liste_colonnes_commune, liste_type_colonnes_commune, liste_valeurs_commune())
+# Thread 1 : insère les départements
+thread1 = threading.Thread(target=creation, args=(nom_departement, liste_colonnes_departement, liste_type_colonnes_departement, liste_valeurs_departement()))
+thread1.start()
+thread1.join()  # attendre que les départements soient insérés
 
+# Thread 2 : insère les ouvrages et communes (indépendants entre eux)
+thread2 = threading.Thread(target=creation, args=(nom_ouvrage, liste_colonnes_ouvrages, liste_type_colonnes_ouvrages, liste_valeurs_ouvrage(liste_colonnes_ouvrages)))
+thread3 = threading.Thread(target=creation, args=(nom_commune, liste_colonnes_commune, liste_type_colonnes_commune, liste_valeurs_commune()))
+
+thread2.start()
+thread3.start()
+
+thread2.join()
+thread3.join()
+
+# Thread 4 : pt_prelevement (dépend des ouvrages + départements)
+thread4 = threading.Thread(target=creation, args=(nom_pt_prelevement, liste_colonnes_pt_prelevement, liste_type_colonnes_pt_prelevement, liste_valeurs_pt_prelevement(liste_colonnes_pt_prelevement)))
+thread4.start()
+thread4.join()
 # --------------- TEST ----------------#
 
 # -----Test pour acces à l'API -------#
