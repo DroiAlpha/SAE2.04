@@ -4,4 +4,10 @@ Ce dossier contient 3 fichiers :
 
     - le fichier Acces_API.py : il contient la classe Acces_API, pour definir la connection à l'API, et les différentes méthodes pour extraires des données de l'API (colonnes et valeurs)
 
-    - le fichier Test.py : il contient les importations nécessaires pour à la fois communiquer avec l'API et avec la database PostGre, ainsi que les liens des 2 APIs ouvrages et points de prélevement. Aussi, contient 2-3 tests (à retirer après)
+    - le fichier Recup_Donnees : Le fichier contient les fonctions nécessaires pour récuperer les données depuis l'API 
+
+    -le fichier Donnees : Le fichier contient l'exécution du code en thread pour que c'est plus rapide. C'est le fichier qui va mettre toutes les données dans PostgreSQL
+
+    -Le ficher Test_inter : est le fichier d'interfaces qui rassemble des tests a éxecuter/faire.
+
+    -Le fichier Test : Est le fichier ou vous mettrez vos test 
