@@ -19,7 +19,7 @@ class Acces_API:
         return arr
     
     def Taille(self):
-        return len(self.Tableau_valeurs())
+        return len(self.Tableau_valeurs()) 
     
     def colonnes(self):
         """

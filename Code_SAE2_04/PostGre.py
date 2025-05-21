@@ -10,7 +10,7 @@ import psycopg2
 class PostGre:
     def __init__(self, host, database, user, password):
         """
-        definie les parametres pour la connection à la 
+        Définie les parametres pour la connection à la 
         database de postgre
         """
         self.host = host
@@ -20,7 +20,7 @@ class PostGre:
 
     def connection(self):
         """
-        creation de la connection à la database postgre
+        Création de la connection à la database postgre
         """
         return psycopg2.connect(
             host = self.host,
@@ -30,13 +30,13 @@ class PostGre:
 
     def creer_table(self, table, colonnes: list, types: list):
         """
-        méthode pour creer une table : 
-            - il faut mettre la liste des colonnes en parametre
-            - il faut mettre la liste des types des colonnes en parametre
+        Méthode pour créer une table : 
+            - Il faut mettre la liste des colonnes en parametre
+            - Il faut mettre la liste des types des colonnes en parametre
         """
         conn = self.connection()
         cur = conn.cursor()
-        colonnes_def = ", ".join(f'"{col.lower()}" {typ}' for col, typ in zip(colonnes, types))
+        colonnes_def = ", ".join(f'"{col.lower()}" {typ}' for col, typ in zip(colonnes, types)) # * Créer une chaîne de charactères avec la colonne et son type
         sql = f'CREATE TABLE IF NOT EXISTS "{table}" ({colonnes_def})'
         cur.execute(sql)
         cur.close()
@@ -45,12 +45,12 @@ class PostGre:
 
     def inserer(self, table, valeurs: list, colonnes: list):
         """
-        méthode pour insérer des valeurs dans une BaD :
+        Méthode pour insérer des valeurs dans une BD :
             - Il faut mettre la liste des valeurs à mettre en parametre
         """
         conn = self.connection()
         cur = conn.cursor()
-        colonnes_def = ", ".join(f'"{col.lower()}"' for col in colonnes)
+        colonnes_def = ", ".join(f'"{col.lower()}"' for col in colonnes) # * Créer une chaîne de charactères avec la colonne et son type
         placeholders = ", ".join(["%s"] * len(valeurs))
         sql = f'INSERT INTO "{table}" ({colonnes_def}) VALUES ({placeholders})'
         cur.execute(sql, valeurs)
@@ -60,7 +60,7 @@ class PostGre:
 
     def afficher(self, table, champs: list):
         """
-        méthode pour afficher le contenu d'une table de la database
+        Méthode pour afficher le contenu d'une table de la database
         permet de tester si le contenu d'une table est présent dans la database
         (et le contenu est bon)
         """
@@ -77,7 +77,7 @@ class PostGre:
 
     def supprimer(self, table):
         """
-        méthode pour supprimer une table
+        Méthode pour supprimer une table
         """
         conn = self.connection()
         cur = conn.cursor()
