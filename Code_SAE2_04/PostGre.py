@@ -13,10 +13,14 @@ class PostGre:
         Définie les parametres pour la connection à la 
         database de postgre
         """
-        self.host = host
-        self.database = database
-        self.user = user
-        self.password = password
+        print("host:", host) # ajout
+        print("database:", database) # ajout
+        print("user:", user) # ajout
+        print("password:", password) # ajout
+        self.host = str(host).encode('utf-8').decode('utf-8') # ajout
+        self.database = str(database).encode('utf-8').decode('utf-8') # ajout
+        self.user = str(user).encode('utf-8').decode('utf-8') # ajout
+        self.password = str(password).encode('utf-8').decode('utf-8') # ajout
 
     def connection(self):
         """
@@ -81,7 +85,7 @@ class PostGre:
         """
         conn = self.connection()
         cur = conn.cursor()
-        sql = f"DROP TABLE {table}"
+        sql = f'DROP TABLE IF EXISTS "{table}"' # Évite des erreurs si la table n'existe pas
         cur.execute(sql)
         conn.commit()
         conn.close()
