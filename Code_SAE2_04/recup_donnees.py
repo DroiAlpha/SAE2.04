@@ -24,7 +24,7 @@ class RecupDonnees:
 
     # -------------- Méthodes -------------- #
 
-    def creation(table: str, colonnes: list, type_colonnes: list, valeurs: list):
+    def creation(self, table: str, colonnes: list, type_colonnes: list, valeurs: list):
         """
         Crée une table et insére des valeurs dans la base de données PostgreSQL
         Paramètres :
@@ -140,6 +140,7 @@ class RecupDonnees:
             print(f"[ERREUR] Impossible de récupérer les données sur les départements → {e}")
             return None
 
+    @staticmethod
     def diviser_liste(L):
         """
         Divise une liste en deux moitiés

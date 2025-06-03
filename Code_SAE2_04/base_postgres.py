@@ -6,7 +6,7 @@
 
 """
 base_postgres.py : module pour intéragir avec une base de données PostgreSQL
-# ? Ajout de commentaires et la gestion des erreurs et des exceptions
+# ? Ajout de commentaires et gestion des erreurs et des exceptions
 """
 
 import psycopg2
